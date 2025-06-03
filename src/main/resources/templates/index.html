@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Socket</title>
+    <style>
+        @media (max-width: 600px) {
+            body {
+                font-size: 1.1em;
+            }
+            .chat-container, #messages {
+                max-width: 98vw !important;
+            }
+            input[type="text"] {
+                font-size: 1em !important;
+            }
+            button {
+                font-size: 1em !important;
+            }
+        }
+        #messages li {
+            background: #fff;
+            margin-bottom: 8px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body style="margin:0;font-family:sans-serif;background:#f4f6fb;">
+<h2 style="text-align:center;margin-top:30px;color:#1976d2;">WebSocket Chat</h2>
+<div style="max-width:500px;margin:auto;display:flex;gap:8px;flex-wrap:wrap;">
+    <input type="text" id="messageInput" placeholder="Type a message..."
+           onkeydown="if(event.key==='Enter'){sendMessage();}"
+           style="flex:1 1 200px;padding:10px;font-size:1em;border-radius:5px;border:1px solid #ccc;"/>
+    <button onclick="sendMessage()"
+            style="padding:10px 18px;font-size:1em;border-radius:5px;border:none;background:#1976d2;color:#fff;cursor:pointer;">
+        Send
+    </button>
+</div>
+<ul id="messages" style="max-width:500px;margin:20px auto 0;padding:0;list-style:none;"></ul>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+<script>
+    let stompClient = null;
+
+    function connect() {
+        const socket = new SockJS('/message');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);  // Log the successful connection
+            stompClient.subscribe('/messages', function (msg) {
+                showMessage(msg.body);
+            });
+        }, function (error) {
+            console.error('Connection error: ' + error);  // Log any connection errors
+        });
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value;
+        if (message && stompClient) {
+            stompClient.send("/app/sendMessage", {}, message);
+            input.value = '';
+            console.log('Message sent: ' + message);  // Log the sent message
+        } else {
+            console.warn('Message is empty or connection is not established');  // Warn if message is empty or not connected
+        }
+    }
+
+    function showMessage(message) {
+        const messages = document.getElementById('messages');
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(message));
+        messages.appendChild(li);
+    }
+
+    connect();
+
+</script>
+</body>
+</html>
