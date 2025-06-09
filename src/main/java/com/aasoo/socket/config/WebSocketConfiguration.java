@@ -13,9 +13,9 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // Enable a simple in-memory message broker
-        // This broker will handle messages sent to "/topic" and "/queue"
-        // You can define as many topics and queues as needed
-        registry.enableSimpleBroker("/topic", "/queue", "/messages");
+        // This broker will handle messages sent to "/topic"
+        // You can define as many topics as needed
+        registry.enableSimpleBroker("/topic");
         // Set the application destination prefix for messages
         // This prefix is used to route messages to the appropriate controllers
         // For example, messages sent to "/app/sendMessage" will be routed to a controller method

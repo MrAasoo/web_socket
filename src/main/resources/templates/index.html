@@ -50,7 +50,7 @@
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);  // Log the successful connection
-            stompClient.subscribe('/messages', function (msg) {
+            stompClient.subscribe('/topic/message', function (msg) {
                 showMessage(msg.body);
             });
         }, function (error) {

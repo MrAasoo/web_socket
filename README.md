@@ -9,6 +9,7 @@ Application allows users to join a chat room and send messages in real-time.
 
 >- Spring Boot
 >- Spring WebSocket
+>- RESTFul API
 >- Thymeleaf
 
 ---
@@ -21,6 +22,7 @@ Application allows users to join a chat room and send messages in real-time.
 - Maven
 - An IDE (like IntelliJ IDEA or Eclipse)
 - A web browser
+- Postman (for testing REST APIs)
 
 ### Installation
 
